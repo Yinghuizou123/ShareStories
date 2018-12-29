@@ -2,7 +2,6 @@ const express = require("express");
 //Test checkin branch
 //some change to the master
 //some comment too
-//
 const routers = require("./routes/api");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
