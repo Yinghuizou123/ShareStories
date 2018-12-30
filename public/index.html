@@ -8,41 +8,69 @@
     </head>
     <body>
 
-       <h2>Clickable Dropdown</h2>
-<p>Click on the button to open the dropdown menu.</p>
-
-<div class="dropdown">
-  <button id="myBtn" class="dropbtn">Dropdown</button>
-  <div id="myDropdown" class="dropdown-content">
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-  </div>
-</div>
-
+        <h1 class="title">Ninjago - a Ninja REST API</h1>
+        <div id="homepage">
+            <h1>Hire a ninja in your area!</h1>
+            <div id="ninjas"></div>
+        </div>
 
         <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
         <script src="https://unpkg.com/react@15/dist/react.js"></script>
         <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
 
-
-
-<script>
-// Get the button, and when the user clicks on it, execute myFunction
-document.getElementById("myBtn").onclick = function() {BusinessCategoryService()};
-
-/* myFunction toggles between adding and removing the show class, which is used to hide and show the dropdown content */
-function BusinessCategoryService($http) {
-
-    fetch('http://localhost:3000/api/shareStories').then(function(data){
+        <!-- Create React Component -->
+        <script type="text/babel">
+        var Ninjas = React.createClass({
+            getInitialState: function(){
+                return({
+                    ninjas: []
+                });
+            },
+            render: function(){
+                var ninjas = this.state.ninjas;
+                ninjas = ninjas.map(function(ninja, index){
+                    return(
+                        <li key={index}>
+                            <span className={ninja.title}></span>
+                            <span className="name">{ninja.content}</span>
+                            <span className="rank">{ninja.title}</span>
+                        </li>
+                    );
+                });
+                return(
+                    <div id="ninja-container">
+                        <form id="search" onSubmit={this.handleSubmit}>
+                            <label>Enter your Latitude:</label>
+                            <input type="text" ref="lat" placeholder="latitude" required />
+                            <label>Enter your Longitude:</label>
+                            <input type="text" ref="lng" placeholder="longitude" required />
+                            <input type="submit" value="Find Ninjas" />
+                        </form>
+                        <ul>{ninjas}</ul>
+                    </div>
+                );
+            },
+            handleSubmit: function(e){
+                e.preventDefault();
+                var lng = this.refs.lng.value;
+                var lat = this.refs.lat.value;
+                fetch('http://localhost:3000/api/shareStories').then(function(data){
                     return data.json();
                 }).then( json => {
-                   
+                    this.setState({
+                        ninjas: json
+                    });
                     console.log(json);
                 });
+            }
+        });
+        ReactDOM.render(<Ninjas />, document.getElementById('ninjas'));
+        </script>
 
-}
-</script>
 
     </body>
 </html>
+     
+
+
+
