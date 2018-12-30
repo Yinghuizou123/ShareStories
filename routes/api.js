@@ -4,9 +4,17 @@ const router = express.Router();
 const Story = require("../models/shareStories");
 //request body get data from the endpoints but it could be changer by user input
 //Getings Story from database by title
+
+router.get("/shareStories", function(req, res, next) {
+  Story.find({}).then(function(story) {
+    res.send(story);
+    console.log(story);
+  });
+});
 router.get("/shareStories/:title", function(req, res, next) {
   Story.findOne({ title: req.body.title }).then(function(story) {
     res.send(story);
+    console.log(story);
   });
 });
 
