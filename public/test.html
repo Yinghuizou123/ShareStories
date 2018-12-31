@@ -10,7 +10,7 @@
 
         <h1 class="title">Share Stories</h1>
         <div id="homepage">
-            <h1>Watch All the Current Story</h1>
+            <h1>Hire a ninja in your area!</h1>
             <div id="ShareStoriesOutput"></div>
         </div>
 
@@ -23,15 +23,42 @@
 
         var ShareStories = React.createClass({
 
+             componentDidMount:function(){
+                 console.log("get fire")
+                },
+                
+
             getInitialState: function(){
                 return({
                     shareStoryJson: []
                 });
             },
-
-             componentDidMount:function(){
-                 //Preload data from databse
-                   fetch('http://localhost:3000/api/shareStories').then(function(data){
+            render: function(){
+                var ninjas = this.state.shareStoryJson;
+                ninjas = ninjas.map(function(ninja, index){
+                    return(
+                        <li key={index}>
+                            <span className={ninja.title}></span>
+                            <span className="title">{ninja.title}</span>
+                            <span className="content">{ninja.content}</span>
+                        </li>
+                    );
+                });
+                return(
+                    <div id="ninja-container">
+                        <form id="search" onSubmit={this.handleSubmit}>
+                            <input type="submit" value="Find Ninjas" />
+                        </form>
+                        
+                        <ul>{ninjas}</ul>
+                        
+                    </div>
+                );
+            },
+            handleSubmit: function(e){
+                e.preventDefault();
+                
+                fetch('http://localhost:3000/api/shareStories').then(function(data){
                     return data.json();
                 }).then( json => {
                     this.setState({
@@ -39,25 +66,8 @@
                     });
                     console.log(json);
                 });
-             },
-           
-            render: function(){
-                var InputJson = this.state.shareStoryJson;
-                var OutputJson = InputJson.map(function(story, index){
-                    return(
-                        <li key={index}>
-                            <span className="title">{story.title}</span>
-                            <span className="content">{story.content}</span>
-                        </li>
-                    );
-                });     
-                return(
-                    <div id="ninja-container">        
-                        <ul>{OutputJson}</ul>
-                    </div>
-                );
-            },
-            
+               
+            }
         });
         ReactDOM.render(<ShareStories />, document.getElementById('ShareStoriesOutput'));
         </script>
